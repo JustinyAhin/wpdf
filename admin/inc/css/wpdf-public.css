@@ -1,0 +1,31 @@
+/**
+ * WordPress Data Filter main CSS
+ *
+ * Attention: Do not modify this file directly, but use the "Custom CSS" textarea
+ *
+ * @package  wpdf
+ * @author Justin Ahinon
+ * @since 1.0
+ */
+
+table.dataTable thead .sorting:after, 
+table.dataTable thead .sorting_asc:after, 
+table.dataTable thead .sorting_asc_disabled:after, 
+table.dataTable thead .sorting_desc:after, 
+table.dataTable thead .sorting_desc_disabled:after {
+    right: 22px !important;
+}
+
+#users-table th {
+    padding: .6em;
+}
+
+.dataTables_paginate a {
+    text-decoration: none !important;
+}
+
+@media ( min-width: 1024px ) {
+    .users-table-wrapper {
+        overflow-x: hidden !important;
+    }
+}
