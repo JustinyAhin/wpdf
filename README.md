@@ -10,7 +10,7 @@ Create, filter, sort and display data in your WordPress site.
 
 ## Frequently Asked Questions
 
-# How to display the users table?
+### How to display the users table?
 
 To display the users table, just add the shortcode [wpdf-users] in a post,
 a page or a widget. The plugin will automatically fetch the list of users
