@@ -3,8 +3,12 @@
 })(jQuery);
 
 function tableDisplay($) {
-    var users_list = users;
+    // Use the params variable of wp_localize_script()
+    // and parse it with JSON.parse()
+    var users_list = JSON.parse(params);
+
     $(document).ready(function () {
+        // Create and render the table with a set of options
         $('#users-table').DataTable({
             data: users_list,
             aaSorting: [],

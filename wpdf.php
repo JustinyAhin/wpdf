@@ -26,15 +26,9 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * i18n
  */
-function load_wpdf_textdomain() {
 	load_plugin_textdomain( 'wpdf', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ); 
-}
-add_action( 'plugin_loaded', 'load_wpdf_textdomain' );
 
 /**
- * Admin
+ * Include the plugin functions file
  */
-if (is_admin()) {
-	require_once plugin_dir_path( __FILE__ ) . 'admin/wpdf-admin.php';
-}
 require_once plugin_dir_path( __FILE__ ) . 'admin/wpdf-functions.php';

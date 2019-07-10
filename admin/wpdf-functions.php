@@ -36,34 +36,6 @@ function wpdf_current_user_role() {
     }
 }
 
-add_action( 'admin_menu', 'wpdf_admin_menu' );
-function wpdf_admin_menu() {
-    add_menu_page(
-        __( 'Dashboard', 'wpdf' ),
-        'WPDF',
-        'manage_options',
-        'wpdf_dsh',
-        'wpdf_dsh',
-        'dashicons-welcome-widgets-menus'
-    );
-}
-
-/**
- * Enqueue plugin styles and scripts that load in the frontend
- */
-function wpdf_enqueue_public_styles() {
-    if( wpdf_current_user_role() ) {
-            wp_enqueue_style( 'wpdf-public-style', plugin_dir_url( __FILE__ ) . 'inc/css/wpdf-public.css', array(), '' );
-            wp_enqueue_style( 'boostrap-css', plugin_dir_url( __FILE__ ) . 'lib/bootstrap/css/bootstrap.css', array(), '' );
-            wp_enqueue_style( 'datatables-css', plugin_dir_url( __FILE__ ) . 'lib/mdb/css/datatables.min.css' );
-            wp_enqueue_style( 'font-awesome-css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css' );
-
-            wp_enqueue_script( 'wpdf-main-js', plugin_dir_url( __FILE__ ) . 'inc/js/wpdf-script.js', array(), '' );
-            wp_enqueue_script( 'datatables-js', plugin_dir_url( __FILE__ ) . 'lib/mdb/js/datatables.min.js' );
-    }
-}
-add_action( 'wp_enqueue_scripts', 'wpdf_enqueue_public_styles' );
-
 /**
  * Retrieve the list of users ID of the site
  * 
@@ -84,18 +56,60 @@ function wpdf_users_list() {
             $users_list[$row_number][2] = $users_details[$row_number]->roles[0];
         }
     }
-
-    return $users_list;
+    
+    // Return the json encoded array
+    return json_encode( $users_list );
 }
 
-function wpdf_users_to_json() { ?>
-    <script>
-		var users = <?php echo json_encode( wpdf_users_list() ); ?>
-	</script>
-<?php }
+/**
+ * Assign the wpdf_users_list() return value to a global function
+ * that will be used in wp_localize_script()
+ */
+$users = wpdf_users_list();
 
 /**
- * Users table shortcode
+ * Enqueue plugin styles and scripts that load in the frontend
+ * 
+ * @package  wpdf
+ * @since 1.0
+ */
+function wpdf_enqueue_public_scripts() {
+    if( wpdf_current_user_role() ) {
+        // Enqueue plugin main style
+        wp_enqueue_style( 'wpdf-public-style', plugin_dir_url( __FILE__ ) . 'inc/css/wpdf-public.css', array(), '' );
+        
+        // Enqueue bootstrap css
+        wp_enqueue_style( 'boostrap-css', plugin_dir_url( __FILE__ ) . 'lib/bootstrap/css/bootstrap.css', array(), '' );
+        
+        // Enqueue fontawesome css
+        wp_enqueue_style( 'font-awesome-css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css' );
+        
+        // Enqueue datatables style file
+        wp_enqueue_style( 'datatables-css', plugin_dir_url( __FILE__ ) . 'lib/mdb/css/datatables.min.css' );
+
+        /**
+         * Use the global users variable that contains the users array
+         * encoded in JSon
+         * 
+         * The variable is use as parameter for the wp_localize_script()
+         * function to be available in JavaScript main file
+         * which is enqueued just before
+         */
+        global $users;
+        wp_enqueue_script( 'wpdf-main-js', plugin_dir_url( __FILE__ ) . 'inc/js/wpdf-script.min.js', array(), '' );
+        wp_localize_script( 'wpdf-main-js', 'params', $users );
+        
+        // Enqueue datatables JS file
+        wp_enqueue_script( 'datatables-js', plugin_dir_url( __FILE__ ) . 'lib/mdb/js/datatables.min.js' );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'wpdf_enqueue_public_scripts' );
+ 
+/**
+ * Initialize the shortcode
+ * 
+ * The wpdf_display_shortcode() function as callback is used 
+ * when the shortcode is called in a page or post
  * 
  * @package  wpdf
  * @since 1.0
@@ -108,11 +122,22 @@ add_action('init', 'wpdf_init_shortcode');
 /**
  * Implement users table shortcode
  * 
+ * This function create and return a <table> HTML element
+ * just with the head <thead> and an empty body <tbody>
+ * 
+ * It also add an id to the table which is used in JavaScript
+ * by the Datatables() function to render in frontend the full 
+ * table using the list of users
+ * 
  * @package  wpdf
  * @since 1.0
  */
-wpdf_users_to_json();
 function wpdf_display_shortcode() {
+    /**
+     * Display the shortcode content only if the current user is admin
+     * 
+     * Else, a custom message is displayed
+     */
     if( wpdf_current_user_role() ) {
         $output = '';
 
@@ -135,6 +160,6 @@ function wpdf_display_shortcode() {
         return $output;
     }
     else {
-        return esc_html_e( 'You\'re not authorized to see this content', 'wpdf' );
+        return 'You\'re not authorized to see this content';
     }
 }
