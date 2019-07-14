@@ -1,8 +1,8 @@
 # WordPress Data Filter
-> Create, filter, sort and display data in your WordPress site.
+> Create, filter, sort and display users data on your WordPress site.
 
 ## Description
-Create, filter, sort and display data in your WordPress site.
+Create, filter, sort and display users data on your WordPress site.
 
 ## Installation
 1. Copy the plugin folder to your wp-content/plugins folder

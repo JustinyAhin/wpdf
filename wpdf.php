@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       WP Data Filter
  * Plugin URI:        https://github.com/JustinyAhin/wpdf
- * Description:       Create, filter, sort and display data.
+ * Description:       Create, filter, sort and display users data.
  * Version:           1.0
  * Author:            Justin Ahinon
  * Author URI:        http://segbedji.com

@@ -8,10 +8,10 @@ Stable tag: 1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Create, filter, sort and display data in your WordPress site.
+Create, filter, sort and display users data on your WordPress site.
 
 == Description ==
-Create, filter, sort and display data in your WordPress site.
+Create, filter, sort and display users data on your WordPress site.
 
 == Installation ==
 1. Copy the plugin folder to your wp-content/plugins folder
