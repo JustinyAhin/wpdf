@@ -1,8 +1,7 @@
 (function($) {
     tableDisplay($); 
-})(jQuery);
 
-function tableDisplay($) {
+    function tableDisplay($) {
     // Use the params variable of wp_localize_script()
     // and parse it with JSON.parse()
     var users_list = JSON.parse(params);
@@ -33,3 +32,6 @@ function tableDisplay($) {
         });
     });
 }
+
+})(jQuery);
+
